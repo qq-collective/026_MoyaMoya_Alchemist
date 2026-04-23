@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QQ #032 — Edward｜要件ヒアリング</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #0f0f0f;
+      color: #e8e8e8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    header .badge {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+    }
+    header p {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #888;
+    }
+    .form-card {
+      width: 100%;
+      max-width: 600px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 32px;
+    }
+    .field {
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: #aaa;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #e8e8e8;
+      font-size: 15px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+    input[type="text"]:focus, textarea:focus {
+      border-color: #555;
+    }
+    textarea { min-height: 80px; }
+    .features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .feature-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .feature-row input { flex: 1; }
+    .btn-add {
+      background: none;
+      border: 1px dashed #444;
+      color: #888;
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-add:hover { border-color: #888; color: #ccc; }
+    .btn-remove {
+      background: none;
+      border: none;
+      color: #555;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 0 4px;
+      transition: color 0.2s;
+    }
+    .btn-remove:hover { color: #e55; }
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .btn-save {
+      flex: 1;
+      background: #e8e8e8;
+      color: #0f0f0f;
+      border: none;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-save:hover { background: #fff; }
+    .btn-alphonse {
+      flex: 1;
+      background: none;
+      border: 1px solid #555;
+      color: #ccc;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      text-decoration: none;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-alphonse:hover { border-color: #aaa; color: #fff; }
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #2a2a2a;
+      border: 1px solid #444;
+      color: #e8e8e8;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge">QQ #032</div>
+  <h1>Edward</h1>
+  <p>アプリの種を育てよう。何を作りたいか、話してみて。</p>
+</header>
+
+<div class="form-card">
+  <div class="field">
+    <label>アプリ名</label>
+    <input type="text" id="title" placeholder="例：ゼミ発表タイマー">
+  </div>
+  <div class="field">
+    <label>解決したいモヤモヤ</label>
+    <textarea id="problem" placeholder="例：発表中に時間をうまく配分できない"></textarea>
+  </div>
+  <div class="field">
+    <label>誰のため</label>
+    <input type="text" id="target" placeholder="例：発表に不慣れな学部生">
+  </div>
+  <div class="field">
+    <label>欲しい機能（最低1つ）</label>
+    <div class="features-list" id="featuresList">
+      <div class="feature-row">
+        <input type="text" placeholder="例：カウントダウン表示">
+        <button class="btn-remove" onclick="removeFeature(this)" title="削除">×</button>
+      </div>
+    </div>
+    <button class="btn-add" onclick="addFeature()" style="margin-top:8px; width:100%;">＋ 機能を追加</button>
+  </div>
+
+  <div class="actions">
+    <button class="btn-save" onclick="saveSeed()">種を保存する</button>
+    <a class="btn-alphonse" href="alphonse.html">Alphonse へ →</a>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  function addFeature() {
+    const list = document.getElementById('featuresList');
+    const row = document.createElement('div');
+    row.className = 'feature-row';
+    row.innerHTML = `<input type="text" placeholder="機能を入力"><button class="btn-remove" onclick="removeFeature(this)" title="削除">×</button>`;
+    list.appendChild(row);
+  }
+
+  function removeFeature(btn) {
+    const list = document.getElementById('featuresList');
+    if (list.children.length <= 1) return;
+    btn.parentElement.remove();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  function saveSeed() {
+    const title   = document.getElementById('title').value.trim();
+    const problem = document.getElementById('problem').value.trim();
+    const target  = document.getElementById('target').value.trim();
+    const features = Array.from(document.querySelectorAll('#featuresList input'))
+                          .map(i => i.value.trim())
+                          .filter(v => v !== '');
+
+    if (!title || !problem || !target || features.length === 0) {
+      showToast('すべての項目を入力してください');
+      return;
+    }
+
+    const seed = {
+      title,
+      problem,
+      target,
+      features,
+      timestamp: new Date().toISOString()
+    };
+
+    localStorage.setItem('qq_seed', JSON.stringify(seed));
+    showToast('種を保存しました ✓');
+  }
+
+  // ページ読み込み時に既存データを復元
+  window.addEventListener('DOMContentLoaded', () => {
+    const raw = localStorage.getItem('qq_seed');
+    if (!raw) return;
+    try {
+      const seed = JSON.parse(raw);
+      if (seed.title)   document.getElementById('title').value   = seed.title;
+      if (seed.problem) document.getElementById('problem').value = seed.problem;
+      if (seed.target)  document.getElementById('target').value  = seed.target;
+      if (seed.features && seed.features.length > 0) {
+        const list = document.getElementById('featuresList');
+        list.innerHTML = '';
+        seed.features.forEach(f => {
+          const row = document.createElement('div');
+          row.className = 'feature-row';
+          row.innerHTML = `<input type="text" value="${f}"><button class="btn-remove" onclick="removeFeature(this)" title="削除">×</button>`;
+          list.appendChild(row);
+        });
+      }
+    } catch(e) {}
+  });
+</script>
+
+</body>
+</html>
