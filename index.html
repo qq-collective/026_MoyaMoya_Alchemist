@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>モヤモヤの錬金術師 — QQ #032/#033</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #f2ead8;
+    --parchment-dark: #e0d4b8;
+    --ink: #1e160a;
+    --ink-mid: #4a3820;
+    --ink-dim: #8a7258;
+    --red: #c84a2a;
+    --red-l: #e87050;
+    --red-d: #8a2a10;
+    --gold: #b8922a;
+    --gold-l: #d4b060;
+    --gold-d: #7a5e18;
+    --cream: #faf5ea;
+    --shadow: rgba(30, 22, 10, 0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'Noto Serif JP', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* 背景テクスチャ */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(184,146,42,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(200,74,42,0.06) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 72px 24px 56px;
+    border-bottom: 1px solid var(--parchment-dark);
+  }
+
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 7vw, 64px);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 8px;
+    animation: fadeDown 0.9s ease both;
+    animation-delay: 0.05s;
+  }
+
+  .header-title em {
+    font-style: italic;
+    color: var(--red);
+  }
+
+  .header-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(14px, 2.5vw, 18px);
+    font-style: italic;
+    color: var(--ink-dim);
+    margin-bottom: 32px;
+    animation: fadeDown 1s ease both;
+    animation-delay: 0.1s;
+  }
+
+  .header-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    animation: fadeDown 1s ease both;
+    animation-delay: 0.15s;
+  }
+
+  .header-divider::before,
+  .header-divider::after {
+    content: '';
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+
+  .header-divider::after {
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  .header-divider span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+  }
+
+  /* ── FLOW SECTION ── */
+  .flow-section {
+    position: relative;
+    z-index: 10;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 64px 24px;
+  }
+
+  .flow-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeUp 0.8s ease both;
+    animation-delay: 0.2s;
+  }
+
+  .flow-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .flow-step {
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .flow-step:nth-child(1) { animation-delay: 0.25s; }
+  .flow-step:nth-child(2) { animation-delay: 0.35s; }
+  .flow-step:nth-child(3) { animation-delay: 0.45s; }
+
+  .flow-spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40px;
+    flex-shrink: 0;
+  }
+
+  .flow-node {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--parchment-dark);
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s;
+  }
+
+  .flow-line {
+    width: 1px;
+    flex: 1;
+    min-height: 24px;
+    background: linear-gradient(180deg, var(--parchment-dark), transparent);
+    margin: 4px 0;
+  }
+
+  .flow-body {
+    flex: 1;
+    padding: 0 0 40px 0;
+  }
+
+  /* ── CARDS ── */
+  .app-card {
+    background: var(--cream);
+    border: 1px solid var(--parchment-dark);
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+  }
+
+  .app-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--ink-mid));
+    opacity: 0.6;
+    transition: opacity 0.3s;
+  }
+
+  .app-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px var(--shadow);
+    border-color: var(--card-accent, var(--ink-mid));
+  }
+
+  .app-card:hover::before { opacity: 1; }
+
+  .app-card.edward { --card-accent: var(--red); }
+  .app-card.alphonse { --card-accent: var(--gold); }
+  .app-card.landing { --card-accent: var(--ink-mid); cursor: default; }
+  .app-card.landing:hover { transform: none; box-shadow: none; border-color: var(--parchment-dark); }
+
+  .card-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--ink-dim);
+    margin-bottom: 6px;
+  }
+
+  .card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+    transition: color 0.2s;
+  }
+
+  .app-card.edward .card-name { color: var(--red); }
+  .app-card.alphonse .card-name { color: var(--gold-d); }
+
+  .card-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--ink-mid);
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--card-accent, var(--ink-mid));
+    transition: gap 0.2s;
+  }
+
+  .app-card:hover .card-cta { gap: 12px; }
+
+  .card-arrow {
+    font-size: 14px;
+    transition: transform 0.2s;
+  }
+
+  .app-card:hover .card-arrow { transform: translateX(4px); }
+
+  /* ── 「ここから始める」カード ── */
+  .start-card {
+    background: var(--ink);
+    color: var(--parchment);
+    border: none;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 40px;
+    animation: fadeUp 0.8s ease both;
+    animation-delay: 0.2s;
+  }
+
+  .start-card p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: rgba(242,234,216,0.7);
+    line-height: 1.8;
+    margin-bottom: 6px;
+  }
+
+  .start-card strong {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    color: var(--parchment);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 32px 24px 48px;
+    border-top: 1px solid var(--parchment-dark);
+  }
+
+  .footer-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 480px) {
+    .flow-step { gap: 16px; }
+    .app-card { padding: 22px 20px 18px; }
+    .card-name { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">QQ #032 / #033 — Quest Queries</div>
+  <h1 class="header-title"><em>モヤモヤの錬金術師</em></h1>
+  <p class="header-subtitle">アプリの種を見つけ、要件定義へと育てる兄弟ツール。</p>
+  <div class="header-divider"><span>◆</span></div>
+</header>
+
+<section class="flow-section">
+
+  <p class="flow-label">使いかた — How it works</p>
+
+  <!-- 説明カード -->
+  <div class="start-card">
+    <p>「作りたいものがある。でも、何から始めればいいかわからない。」</p>
+    <strong>そのモヤモヤを、まずエドワードに話してみてください。</strong>
+  </div>
+
+  <div class="flow-steps">
+
+    <!-- Step 1: Edward -->
+    <div class="flow-step">
+      <div class="flow-spine">
+        <div class="flow-node">⚗️</div>
+        <div class="flow-line"></div>
+      </div>
+      <div class="flow-body">
+        <a class="app-card edward" href="edward.html">
+          <div class="card-number">#032</div>
+          <div class="card-name">Edward</div>
+          <div class="card-role">モヤモヤの錬金術師</div>
+          <div class="card-desc">
+            アプリを作りたいけど何から始めればいいかわからない——<br>
+            そのモヤモヤをエドワードに話すと、対話を通じて<strong>アプリの種</strong>を一緒に見つけます。
+          </div>
+          <div class="card-cta">
+            <span>始める</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Step 2: Alphonse -->
+    <div class="flow-step">
+      <div class="flow-spine">
+        <div class="flow-node">📜</div>
+        <div class="flow-line"></div>
+      </div>
+      <div class="flow-body">
+        <a class="app-card alphonse" href="alphonse.html">
+          <div class="card-number">#033</div>
+          <div class="card-name">Alphonse</div>
+          <div class="card-role">要件定義の書記官</div>
+          <div class="card-desc">
+            エドワードから受け取った種を復唱し、UI・場面・トーンを一緒に選びながら<strong>要件定義書とREADME</strong>を生成します。<br>
+            GitHubへのあげかたもここで案内します。
+          </div>
+          <div class="card-cta">
+            <span>開く</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Step 3: Done -->
+    <div class="flow-step">
+      <div class="flow-spine">
+        <div class="flow-node">🌱</div>
+      </div>
+      <div class="flow-body">
+        <div class="app-card landing">
+          <div class="card-number">NEXT</div>
+          <div class="card-name" style="color: var(--ink-mid); font-size: 22px;">アプリを世界へ</div>
+          <div class="card-desc">
+            要件定義ができたら、いよいよ実装へ。<br>
+            アルフォンスが出力した仕様書を持って、Claude・GitHub Copilot・Claude Codeに渡せば、あとはAIが助けてくれます。
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section style="position:relative; z-index:10; max-width:720px; margin:0 auto; padding:0 24px 64px;">
+  <div style="
+    background: var(--ink);
+    border-radius: 16px;
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+  ">
+    <div style="
+      position: absolute;
+      top: -20px; right: -20px;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,74,42,0.12), transparent 70%);
+      pointer-events: none;
+    "></div>
+
+    <div style="
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    ">— Alchemist's Note</div>
+
+    <h2 style="
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--parchment);
+      margin-bottom: 20px;
+      line-height: 1.4;
+    ">アルフォンスはなぜ、ここで止まるのか。</h2>
+
+    <p style="
+      font-family: 'Noto Serif JP', serif;
+      font-size: 13px;
+      color: rgba(242,234,216,0.6);
+      line-height: 2.1;
+      margin-bottom: 20px;
+    ">実を言えば、アルフォンスにはアプリのコードそのものを錬成する力もある。<br>
+    要件定義を読み込み、HTMLを一気に書き上げることも、技術的には不可能ではない。</p>
+
+    <p style="
+      font-family: 'Noto Serif JP', serif;
+      font-size: 13px;
+      color: rgba(242,234,216,0.85);
+      line-height: 2.1;
+      margin-bottom: 20px;
+      border-left: 2px solid var(--red-d);
+      padding-left: 18px;
+    ">しかし——錬金術には、等価交換の原則がある。<br>
+    コードの錬成は出力が大きくなりすぎ、世界の調和を乱す。<br>
+    今はまだ、<span style="color:var(--parchment); font-weight:700;">定義までが、アルフォンスの領分。</span></p>
+
+    <p style="
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: rgba(242,234,216,0.45);
+      line-height: 1.9;
+    ">この先どうするか——それはまた、みんなで考えよう。<br>
+    エドワードも、アルフォンスも、まだ旅の途中だから。</p>
+  </div>
+</section>
+
+<footer>
+  <p class="footer-text">QQ #032/#033 — Edward &amp; Alphonse — Quest Queries Series</p>
+</footer>
+
+</body>
+</html>
